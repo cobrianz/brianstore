@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --port 4180",
     "build": "next build",
-    "start": "next start --port 4180"
+    "start": "next start --port 4180",
+    "seed:free-guides": "node --env-file=.env.local scripts/seed-free-guides.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.840.0",
