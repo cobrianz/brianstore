@@ -4,6 +4,7 @@ import { findOrder, updateOrder } from '@/lib/orders';
 import { getMailer, publicBaseUrl } from '@/lib/mailer';
 import { checkoutEnabled, paystackRequest } from '@/lib/paystack';
 import { getSignedDownloadUrl } from '@/lib/r2';
+import { receiptEmail } from '@/lib/email-templates';
 import CheckoutResult from '@/components/CheckoutResult';
 
 interface DownloadLink { name: string; url: string; }
@@ -51,12 +52,17 @@ async function verifyAndFulfill(reference: string): Promise<{ order: any; links:
   if (transport) {
     try {
       const from = process.env.SMTP_FROM || process.env.SMTP_USER;
+      const message = receiptEmail({
+        items: links,
+        reference,
+        amount: order.amount,
+        currency: order.currency,
+        expiresAt,
+      });
       await transport.sendMail({
         from: `Brian's AI Downloads <${from}>`,
         to: order.email,
-        subject: 'Your Brian Cheruiyot digital downloads',
-        text: `Thanks for your purchase!\n\nYour private download links (valid 30 days):\n\n${links.map(x => `${x.name}:\n${x.url}`).join('\n\n')}\n\nIf you didn't make this purchase, reply to this email.`,
-        html: `<p>Thanks for your purchase!</p><p>Your private download links (valid 30 days):</p><ul>${links.map(x => `<li><a href="${x.url}">${x.name}</a></li>`).join('')}</ul><p>If you didn't make this purchase, reply to this email.</p>`,
+        ...message,
       });
       await updateOrder(reference, { receiptSentAt: new Date() });
     } catch (e) { console.error('Receipt email failed:', e); }

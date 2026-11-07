@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveSubscriber } from '@/lib/orders';
-import { getMailer, emailValid } from '@/lib/mailer';
+import { getMailer, emailValid, publicBaseUrl } from '@/lib/mailer';
+import { welcomeEmail } from '@/lib/email-templates';
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
@@ -21,11 +22,11 @@ export async function POST(req: NextRequest) {
       if (transport) {
         try {
           const from = process.env.SMTP_FROM || process.env.SMTP_USER;
+          const message = welcomeEmail(publicBaseUrl());
           await transport.sendMail({
             from: `Brian's AI Study Notes <${from}>`,
             to: email,
-            subject: "You're on Brian's AI tips list",
-            text: "Thanks for signing up. Unsubscribe at any time by replying to this email.",
+            ...message,
           });
           welcomeSent = true;
         } catch (e) { console.error('Welcome email failed:', e); }
