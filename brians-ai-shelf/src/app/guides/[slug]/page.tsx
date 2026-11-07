@@ -4,6 +4,22 @@ import { getStoreCollections } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
+function renderInline(markdown: string) {
+  const tokens = markdown.split(/(\*\*[^*]+\*\*|`[^`]+`|\*[^*\n]+\*)/g);
+  return tokens.map((token, index) => {
+    if (token.startsWith('**') && token.endsWith('**')) {
+      return <strong key={index}>{token.slice(2, -2)}</strong>;
+    }
+    if (token.startsWith('`') && token.endsWith('`')) {
+      return <code key={index}>{token.slice(1, -1)}</code>;
+    }
+    if (token.startsWith('*') && token.endsWith('*')) {
+      return <em key={index}>{token.slice(1, -1)}</em>;
+    }
+    return token;
+  });
+}
+
 function renderGuideBody(markdown: string) {
   const lines = markdown.split(/\r?\n/);
   const blocks: React.ReactNode[] = [];
@@ -19,7 +35,7 @@ function renderGuideBody(markdown: string) {
     const heading = /^(#{1,3})\s+(.+)$/.exec(line);
     if (heading) {
       const Heading = heading[1].length === 1 ? 'h2' : heading[1].length === 2 ? 'h2' : 'h3';
-      blocks.push(<Heading key={index}>{heading[2]}</Heading>);
+      blocks.push(<Heading key={index}>{renderInline(heading[2])}</Heading>);
       index += 1;
       continue;
     }
@@ -38,7 +54,7 @@ function renderGuideBody(markdown: string) {
       const List = listType === 'unordered' ? 'ul' : 'ol';
       blocks.push(
         <List key={index}>
-          {items.map((item, itemIndex) => <li key={itemIndex}>{item}</li>)}
+          {items.map((item, itemIndex) => <li key={itemIndex}>{renderInline(item)}</li>)}
         </List>,
       );
       continue;
@@ -50,7 +66,7 @@ function renderGuideBody(markdown: string) {
       paragraph.push(lines[index].trim());
       index += 1;
     }
-    blocks.push(<p key={index}>{paragraph.join(' ')}</p>);
+    blocks.push(<p key={index}>{renderInline(paragraph.join(' '))}</p>);
   }
 
   return blocks;
