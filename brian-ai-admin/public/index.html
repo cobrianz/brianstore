@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d31">
+  <title>Store Admin — Brian Cheruiyot</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main id="login-screen" class="login-shell" hidden>
+    <section class="login-card" aria-labelledby="login-title">
+      <a class="brand" href="#"><span class="brand-mark">B</span><span><strong>Brian Cheruiyot</strong><small>STORE ADMIN</small></span></a>
+      <p class="eyebrow">WELCOME BACK</p><h1 id="login-title">Sign in to your store</h1>
+      <p class="muted">Use your administrator account to continue.</p>
+      <form id="login-form" class="stack-form">
+        <label>Email address<input name="email" type="email" autocomplete="username" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+        <p class="form-error" id="login-error" role="alert"></p>
+        <button class="button primary full" type="submit">Sign in</button>
+      </form>
+    </section>
+  </main>
+  <div id="app" class="app-shell" hidden>
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Brian Cheruiyot admin home"><span class="brand-mark">B</span><span><strong>Brian Cheruiyot</strong><small>STORE ADMIN</small></span></a>
+      <p class="nav-caption">WORKSPACE</p>
+      <nav class="nav-list" aria-label="Admin navigation">
+        <button class="nav-item active" data-view="dashboard"><span>◫</span> Overview</button>
+        <button class="nav-item" data-view="products"><span>▧</span> Products</button>
+        <button class="nav-item" data-view="guides"><span>▤</span> Free guides</button>
+        <button class="nav-item" data-view="orders"><span>▱</span> Orders</button>
+        <button class="nav-item" data-view="subscribers"><span>◎</span> Subscribers</button>
+        <button class="nav-item" data-view="files"><span>↥</span> File library</button>
+        <button class="nav-item" data-view="content"><span>✳</span> Site content</button>
+      </nav>
+      <div class="sidebar-bottom"><div class="account-icon">BC</div><div class="account-label"><strong id="user-email">Administrator</strong><small>Store administrator</small></div><button id="logout-button" class="icon-button" aria-label="Sign out" title="Sign out">↗</button></div>
+    </aside>
+    <div class="mobile-bar"><a class="brand" href="#dashboard"><span class="brand-mark">B</span><span><strong>Brian Cheruiyot</strong><small>ADMIN</small></span></a><button class="icon-button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation">☰</button></div>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile admin navigation" hidden></nav>
+    <main class="main-area">
+      <header class="topbar"><div><p class="eyebrow" id="page-kicker">YOUR STORE, AT A GLANCE</p><h1 id="page-title">Overview</h1></div><div class="topbar-right"><span class="live-dot">Store admin</span><span class="date-label" id="today-label"></span></div></header>
+      <div id="global-error" class="notice error-notice" role="alert" hidden></div>
+      <section id="view-dashboard" class="view-panel" aria-label="Overview"></section>
+      <section id="view-products" class="view-panel" hidden></section>
+      <section id="view-guides" class="view-panel" hidden></section>
+      <section id="view-orders" class="view-panel" hidden></section>
+      <section id="view-subscribers" class="view-panel" hidden></section>
+      <section id="view-files" class="view-panel" hidden></section>
+      <section id="view-content" class="view-panel" hidden></section>
+      <footer class="footer-note">Private workspace <span>·</span> Store administration</footer>
+    </main>
+  </div>
+  <dialog id="editor-dialog" class="editor-dialog"><form id="editor-form" method="dialog"><div class="dialog-heading"><div><p class="eyebrow" id="dialog-kicker">STORE</p><h2 id="dialog-title">Edit item</h2></div><button type="button" class="icon-button" data-close-dialog aria-label="Close dialog">×</button></div><div id="dialog-fields" class="dialog-fields"></div><p id="dialog-error" class="form-error" role="alert"></p><div class="dialog-actions"><button class="button secondary" type="button" data-close-dialog>Cancel</button><button class="button primary" id="dialog-save" type="submit">Save changes</button></div></form></dialog>
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <noscript>This administration interface requires JavaScript to connect to the store API.</noscript>
+</body>
+</html>
