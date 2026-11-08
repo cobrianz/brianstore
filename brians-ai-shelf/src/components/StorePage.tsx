@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useStore } from '@/hooks/useStore';
 import Header from './Header';
 import Hero from './Hero';
@@ -64,11 +64,38 @@ export default function StorePage({ products, guides, content }: Props) {
     openCart, closeCart, openProduct, closeProduct, closeAll,
   } = useStore();
 
+  const showProduct = useCallback((product: LiveProduct) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('product', product.slug);
+    window.history.replaceState(window.history.state, '', url);
+    openProduct(product);
+  }, [openProduct]);
+
+  const hideProduct = useCallback(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('product');
+    window.history.replaceState(window.history.state, '', url);
+    closeProduct();
+  }, [closeProduct]);
+
+  const hideAll = useCallback(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('product');
+    window.history.replaceState(window.history.state, '', url);
+    closeAll();
+  }, [closeAll]);
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeAll(); };
+    const slug = new URLSearchParams(window.location.search).get('product');
+    const product = products.find(item => item.slug === slug);
+    if (product) openProduct(product);
+  }, [products, openProduct]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') hideAll(); };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [closeAll]);
+  }, [hideAll]);
 
   const overlayOpen = cartOpen || !!activeProduct;
 
@@ -90,7 +117,7 @@ export default function StorePage({ products, guides, content }: Props) {
           saved={saved}
           onAdd={addToBag}
           onSave={toggleSaved}
-          onOpen={openProduct}
+          onOpen={showProduct}
         />
         <AboutSection content={content} />
       </main>
@@ -98,7 +125,7 @@ export default function StorePage({ products, guides, content }: Props) {
       <FaqSection faqs={content?.faqs} />
       <Footer />
 
-      <div className={`overlay${overlayOpen ? ' open' : ''}`} onClick={closeAll} />
+      <div className={`overlay${overlayOpen ? ' open' : ''}`} onClick={hideAll} />
 
       <CartDrawer
         bag={bag}
@@ -113,8 +140,8 @@ export default function StorePage({ products, guides, content }: Props) {
       {activeProduct && (
         <ProductModal
           product={activeProduct as LiveProduct}
-          onClose={closeProduct}
-          onAdd={(id) => { addToBag(id); closeProduct(); }}
+          onClose={hideProduct}
+          onAdd={(id) => { addToBag(id); hideProduct(); }}
         />
       )}
 

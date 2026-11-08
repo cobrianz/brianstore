@@ -71,7 +71,7 @@ export default function CartDrawer({ bag, products, isOpen, paymentReady, paymen
       {cartItems.length > 0 && (
         <div className="cart-bottom">
           <div className="subtotal"><span>Subtotal · USD</span><span>${total.toFixed(2)}</span></div>
-          <p>Files are delivered from Cloudflare after Paystack confirms payment. Links expire after 30 days.</p>
+          <p>Pay by card or, when supported for this account and currency, mobile money at Paystack checkout. Files are delivered after payment is confirmed; links expire after 30 days.</p>
           <label className="checkout-email" htmlFor="checkoutEmail">
             Email for your receipt and downloads
             <input type="email" id="checkoutEmail" autoComplete="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
@@ -80,7 +80,7 @@ export default function CartDrawer({ bag, products, isOpen, paymentReady, paymen
             {msg || (paymentReady ? 'Ready for secure checkout.' : paymentReason)}
           </p>
           <button className="checkout-btn" disabled={!paymentReady || busy} onClick={pay}>
-            {busy ? 'Connecting to Paystack…' : 'Pay securely with Paystack →'}
+            {busy ? 'Connecting to Paystack…' : 'Pay with Paystack (card or mobile money) →'}
           </button>
         </div>
       )}

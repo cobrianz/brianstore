@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/AdminLayout';
 import DataTable, { StatusBadge, money, fmtDate } from '@/components/DataTable';
 import { toast } from '@/components/Toast';
+import { storefrontUrl } from '@/lib/storefront';
 
 const CATEGORIES = ['AI Prompts', 'Ebooks', 'Learning', 'Productivity', 'Other'];
 const EMPTY = { title: '', slug: '', category: 'AI Prompts', priceCents: 500, status: 'draft', featured: false, description: '', coverKey: '', fileKey: '', fileName: '' };
@@ -90,6 +91,17 @@ export default function ProductsPage() {
     } catch (e: any) { toast(e.message, true); }
   }
 
+  async function copyShareLink(product: any) {
+    try {
+      const url = new URL(storefrontUrl);
+      url.searchParams.set('product', product.slug);
+      await navigator.clipboard.writeText(url.toString());
+      toast('Product link copied.');
+    } catch {
+      toast('Product link could not be copied.', true);
+    }
+  }
+
   const set = (k: string, v: any) => setForm((p: any) => ({ ...p, [k]: v }));
 
   return (
@@ -130,6 +142,9 @@ export default function ProductsPage() {
               { label: 'Updated', render: r => fmtDate(r.updatedAt) },
               { label: 'Actions', render: r => (
                 <div className="row-actions">
+                  <button className="btn btn-secondary btn-sm" disabled={r.status !== 'published'} onClick={() => copyShareLink(r)}>
+                    {r.status === 'published' ? 'Share' : 'Publish to share'}
+                  </button>
                   <button className="btn btn-secondary btn-sm" onClick={() => openEdit(r)}>Edit</button>
                   <button className="btn btn-danger btn-sm" onClick={() => del(r.id, r.title)}>Delete</button>
                 </div>

@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         email, amount, currency: 'USD', reference,
         callback_url: `${baseUrl}/payment/callback`,
+        channels: ['card', 'mobile_money'],
         metadata: { product_slugs: itemSlugs },
       }),
     });

@@ -5,7 +5,7 @@ A separate, self-hosted admin dashboard for Brian’s AI digital-download shop. 
 ## What it manages
 
 - **Dashboard:** product, guide, order, subscriber, and paid-revenue totals plus recent orders.
-- **Products:** create, edit, publish/draft, feature, price, categorize, and attach a private R2 download plus a cover image.
+- **Products:** create, edit, publish/draft, feature, price, categorize, attach a private R2 download plus a cover image, and copy share links for published products.
 - **Free guides:** manage titles, slugs, summaries, Markdown body, category, cover, public URL, and publication state.
 - **Orders:** review customer, item, amount, Paystack reference, and payment state. Payment state is intentionally read-only; the dashboard cannot mark an order paid or change payment verification. It can save an internal support note.
 - **Subscribers:** review, remove, and export contacts as CSV.
@@ -25,6 +25,8 @@ A separate, self-hosted admin dashboard for Brian’s AI digital-download shop. 
 3. Generate an admin password hash by running `npm run hash-password` in an interactive terminal. The utility hides password input and requires 12–72 UTF-8 bytes (bcrypt’s supported password-length range). Copy the resulting bcrypt hash into `ADMIN_PASSWORD_HASH` and set `ADMIN_EMAIL` in `.env`.
 4. Set `COOKIE_SECURE=true` when serving the dashboard over HTTPS. Set `TRUST_PROXY=true` only when the app is behind a trusted reverse proxy.
 5. Run `npm start`, then visit `http://localhost:4180` (or your configured `PORT`).
+
+The admin Storefront links open `https://brianstore-one.vercel.app` by default. To use a different storefront, set `NEXT_PUBLIC_STOREFRONT_URL` in the admin app's environment before building or deploying.
 
 MongoDB stores collections named `products`, `guides`, `orders`, `subscribers`, `site_content`, and `admin_sessions`. Indexes are created on first start. Prices are stored as integer cents (for example, `$5.00` is `500`). Admin sessions are stored in MongoDB and expire after eight hours.
 

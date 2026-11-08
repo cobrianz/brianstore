@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { toast } from '@/components/Toast';
+import { storefrontUrl } from '@/lib/storefront';
 
 declare global { interface Window { __adminCsrf?: string; } }
 
@@ -145,7 +146,7 @@ export default function SettingsPage() {
           <div className="settings-card" style={{ marginTop: 16 }}>
             <h3 className="settings-card-title">Quick links</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
-              <a href="http://localhost:3000" target="_blank" rel="noopener" className="settings-link">Storefront ↗</a>
+              <a href={storefrontUrl} target="_blank" rel="noopener noreferrer" className="settings-link">Storefront ↗</a>
               <a href="https://cloud.mongodb.com" target="_blank" rel="noopener" className="settings-link">MongoDB Atlas ↗</a>
               <a href="https://dash.cloudflare.com" target="_blank" rel="noopener" className="settings-link">Cloudflare R2 ↗</a>
               <a href="https://dashboard.paystack.com" target="_blank" rel="noopener" className="settings-link">Paystack Dashboard ↗</a>
